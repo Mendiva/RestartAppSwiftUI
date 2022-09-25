@@ -9,6 +9,10 @@ import SwiftUI
 
 struct OnboardingView: View {
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = true
+    
+    @State private var buttonWidth: Double = UIScreen.main.bounds.width - 80
+    @State private var buttonOffset: CGFloat = 0
+    
     var body: some View {
         ZStack {
             Color("ColorBlue")
@@ -16,7 +20,7 @@ struct OnboardingView: View {
             
                 
             VStack(spacing: 20) {
-                //HEADER:
+                // MARK: HEADER
                 Spacer()
                 VStack(spacing: 0) {
                     Text("Share")
@@ -36,7 +40,7 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 10)
                 }
-                //CENTER:
+                // MARK: CENTER
                 ZStack {
                     CircleGroupView(ShapeColor: .white, ShapeOpacity: 0.2)
                     Image("character-1")
@@ -44,7 +48,7 @@ struct OnboardingView: View {
                         .scaledToFit()
                 }
                 Spacer()
-                //FOOTER:
+                // MARK: FOOTER
                 //1. Background (Static)
                 ZStack {
                     Capsule()
@@ -78,15 +82,22 @@ struct OnboardingView: View {
                         }
                         .foregroundColor(.white)
                         .frame(width: 80, height: 80, alignment: .center)
-                        .onTapGesture {
-                            isOnboardingViewActive = false
-                        }
+                        .offset(x : buttonOffset)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { gesture in
+                                    if gesture.translation.width > 0 {
+                                        buttonOffset = gesture.translation.width
+                                    }
+                                }
+                        )//: GESTURE
+                        
                         Spacer()
                         
                         
                     }
                 }
-                .frame(height: 80, alignment: .center)
+                .frame(width:buttonWidth ,height: 80, alignment: .center)
                 .padding()
                 
                 
