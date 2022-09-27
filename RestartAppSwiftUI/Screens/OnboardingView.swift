@@ -12,6 +12,7 @@ struct OnboardingView: View {
     
     @State private var buttonWidth: Double = UIScreen.main.bounds.width - 80
     @State private var buttonOffset: CGFloat = 0
+    @State private var isAnimating: Bool = false
     
     var body: some View {
         ZStack {
@@ -40,6 +41,9 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 10)
                 }
+                .opacity(isAnimating ? 1 : 0)
+                .offset(y: isAnimating ? 0 : -40)
+                .animation(.easeOut(duration: 1), value: isAnimating)
                 // MARK: CENTER
                 ZStack {
                     CircleGroupView(ShapeColor: .white, ShapeOpacity: 0.2)
@@ -112,6 +116,9 @@ struct OnboardingView: View {
                 
             } //VStack:
         } //ZStack
+        onAppear(perform: {
+            isAnimating = true
+        })
     }
 
     struct OnboardingView_Previews: PreviewProvider {
